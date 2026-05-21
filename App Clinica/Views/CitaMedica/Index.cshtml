@@ -1,0 +1,150 @@
+﻿@model App_Clinica.Models.UsuarioCitasViewModel
+
+@{
+    Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Usuario y Citas</title>
+</head>
+<body>
+    <h1>Información del Usuario</h1>
+    <table class="table table-striped">
+        <tr>
+            <th>Identificación</th>
+            <td>@Model.Usuario.NumeroIdentificacion</td>
+        </tr>
+        <tr>
+            <th>Nombre</th>
+            <td>@Model.Usuario.Nombre</td>
+        </tr>
+        <tr>
+            <th>Apellido</th>
+            <td>@Model.Usuario.Apellido</td>
+        </tr>
+        <tr>
+            <th>Email</th>
+            <td>@Model.Usuario.Email</td>
+        </tr>
+    </table>
+
+    <h1>Citas Médicas</h1>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Fecha de Cita</th>
+                <th>Estado</th>
+                <th>Comentarios</th>
+                <th>Afiliado</th>
+                <th>Personal Médico</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var cita in Model.CitasMedicas)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => cita.FechaCita)</td>
+                    <td>@Html.DisplayFor(modelItem => cita.Estado)</td>
+                    <td>@Html.DisplayFor(modelItem => cita.Comentarios)</td>
+                    <td>@Html.DisplayFor(modelItem => cita.IdAfiliadoNavigation.Nombre)</td>
+                    <td>@Html.DisplayFor(modelItem => cita.IdPersonalMedicoNavigation.Nombre)</td>
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("2"))
+                    {
+                        <td>
+                            <form asp-action="Edit" asp-route-id="@cita.IdCita" method="get" style="display:inline;">
+                                <button type="submit" class="btn btn-warning btn-sm">Editar</button>
+                            </form>
+                            <form asp-action="Details" asp-route-id="@cita.IdCita" method="get" style="display:inline;">
+                                <button type="submit" class="btn btn-info btn-sm">Detalles</button>
+                            </form>
+                            <form asp-action="Delete" asp-route-id="@cita.IdCita" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                            </form>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>
+
+
+
+@* @model IEnumerable<App_Clinica.Models.CitaMedica>
+
+@{
+    Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.FechaCita)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Estado)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Comentarios)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IdAfiliadoNavigation)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IdPersonalMedicoNavigation)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model) {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FechaCita)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Estado)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Comentarios)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IdAfiliadoNavigation.Nombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IdPersonalMedicoNavigation.Nombre)
+                    </td>
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("2"))
+                    {
+                        <td>
+                            <form asp-action="Edit" asp-route-id="@item.IdCita" method="get" style="display:inline;">
+                                <button type="submit" class="btn btn-warning btn-sm">Edit</button>
+                            </form>
+                            <form asp-action="Details" asp-route-id="@item.IdCita" method="get" style="display:inline;">
+                                <button type="submit" class="btn btn-info btn-sm">Details</button>
+                            </form>
+                            <form asp-action="Delete" asp-route-id="@item.IdCita" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </td>
+                    }
+                </tr>
+}
+    </tbody>
+</table>
+</body>
+</html>
+ *@

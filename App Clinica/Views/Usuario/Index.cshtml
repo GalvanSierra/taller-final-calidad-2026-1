@@ -1,0 +1,169 @@
+﻿@* @model IEnumerable<App_Clinica.Models.Usuario> *@
+
+@model App_Clinica.Models.Usuario
+
+@{
+    Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.NumeroIdentificacion)</th>
+                <th>@Html.DisplayNameFor(model => model.Nombre)</th>
+                <th>@Html.DisplayNameFor(model => model.Apellido)</th>
+                @if (User.Identity.IsAuthenticated && User.IsInRole("2"))
+                {
+                    <th>@Html.DisplayNameFor(model => model.Especialidad)</th>
+                    <th>@Html.DisplayNameFor(model => model.Disponibilidad)</th>
+                }
+                <th>@Html.DisplayNameFor(model => model.Email)</th>
+                <th>@Html.DisplayNameFor(model => model.Telefono)</th>
+                <th>@Html.DisplayNameFor(model => model.IdTipoUsuarioNavigation)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@Html.DisplayFor(model => model.NumeroIdentificacion)</td>
+                <td>@Html.DisplayFor(model => model.Nombre)</td>
+                <td>@Html.DisplayFor(model => model.Apellido)</td>
+                @if (User.Identity.IsAuthenticated && User.IsInRole("2"))
+                {
+                    <td>@Html.DisplayFor(model => model.Especialidad)</td>
+                    <td>@Html.DisplayFor(model => model.Disponibilidad)</td>
+                }
+                <td>@Html.DisplayFor(model => model.Email)</td>
+                <td>@Html.DisplayFor(model => model.Telefono)</td>
+                <td>@Html.DisplayFor(model => model.IdTipoUsuarioNavigation.NombreTipo)</td>
+                @if (User.Identity.IsAuthenticated && User.IsInRole("2"))
+                {
+                    <td>
+                        <form asp-action="Edit" asp-route-id="@Model.IdUsuario" method="get" style="display:inline;">
+                            <button type="submit" class="btn btn-warning btn-sm">Editar</button>
+                        </form>
+                        <form asp-action="Details" asp-route-id="@Model.IdUsuario" method="get" style="display:inline;">
+                            <button type="submit" class="btn btn-info btn-sm">Detalles</button>
+                        </form>
+                        <form asp-action="Delete" asp-route-id="@Model.IdUsuario" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                        </form>
+                    </td>
+                }
+                @if (User.Identity.IsAuthenticated && User.IsInRole("1"))
+                {
+                    <td>
+                        <form asp-action="Edit" asp-route-id="@Model.IdUsuario" method="get" style="display:inline;">
+                            <button type="submit" class="btn btn-warning btn-sm">Editar</button>
+                        </form>
+                        <form asp-action="Details" asp-route-id="@Model.IdUsuario" method="get" style="display:inline;">
+                            <button type="submit" class="btn btn-info btn-sm">Detalles</button>
+                        </form>
+                    </td>
+                }
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
+
+
+@* @{
+    Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.NumeroIdentificacion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Apellido)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Especialidad)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Disponibilidad)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Telefono)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdTipoUsuarioNavigation)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumeroIdentificacion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Apellido)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Especialidad)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Disponibilidad)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Telefono)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdTipoUsuarioNavigation.NombreTipo)
+            </td>
+            @if (User.Identity.IsAuthenticated && User.IsInRole("2"))
+            {
+                <td>
+                            <form asp-action="Edit" asp-route-id="@item.IdUsuario" method="get" style="display:inline;">
+                                <button type="submit" class="btn btn-warning btn-sm">Edit</button>
+                            </form>
+                            <form asp-action="Details" asp-route-id="@item.IdUsuario" method="get" style="display:inline;">
+                                <button type="submit" class="btn btn-info btn-sm">Details</button>
+                            </form>
+                            <form asp-action="Delete" asp-route-id="@item.IdUsuario" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                </td>
+            }
+            
+        </tr>
+}
+    </tbody>
+</table>
+</body>
+</html>
+ *@

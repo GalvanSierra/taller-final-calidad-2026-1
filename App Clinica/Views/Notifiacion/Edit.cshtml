@@ -1,0 +1,58 @@
+﻿@model App_Clinica.Models.Notifiacion
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Edit</title>
+</head>
+<body>
+
+<h4>Notifiacion</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="IdRecordatorio" />
+            <div class="form-group">
+                <label asp-for="IdCita" class="control-label"></label>
+                <select asp-for="IdCita" class="form-control" asp-items="ViewBag.IdCita"></select>
+                <span asp-validation-for="IdCita" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FechaEnvio" class="control-label"></label>
+                <input asp-for="FechaEnvio" class="form-control" />
+                <span asp-validation-for="FechaEnvio" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Mensaje" class="control-label"></label>
+                <input asp-for="Mensaje" class="form-control" />
+                <span asp-validation-for="Mensaje" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Enviada" /> @Html.DisplayNameFor(model => model.Enviada)
+                </label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+        <form asp-controller="Notificacion" asp-action="Index" method="get">
+            <div class="form-group">
+                <input type="submit" value="Regresar" class="btn btn-success" />
+            </div>
+        </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+</body>
+</html>

@@ -1,0 +1,44 @@
+
+# Archivos generados por Docker
+*.tar
+*.tar.gz
+*.tgz
+
+# Archivos de Python
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# Entornos virtuales
+venv/
+env/
+
+# Archivos de dependencias de Node.js
+node_modules/
+
+# Configuración específica del entorno
+.env
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Archivos temporales
+*.bak
+*.tmp
+*.swp
+
+# Archivos de configuración del editor
+.vscode/
+.idea/
+
+# Docker Compose override
+docker-compose.override.yml
+
+# Archivos de logs
+*.log
+
+# Archivos específicos de Visual Studio
+.vs/
+.vsidx

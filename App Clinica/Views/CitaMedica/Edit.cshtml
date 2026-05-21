@@ -1,0 +1,63 @@
+﻿@model App_Clinica.Models.CitaMedica
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Edit</title>
+</head>
+<body>
+
+<h4>CitaMedica</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="IdCita" />
+            <div class="form-group">
+                <label asp-for="IdAfiliado" class="control-label"></label>
+                <select asp-for="IdAfiliado" class="form-control" asp-items="ViewBag.IdAfiliado"></select>
+                <span asp-validation-for="IdAfiliado" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdPersonalMedico" class="control-label"></label>
+                <select asp-for="IdPersonalMedico" class="form-control" asp-items="ViewBag.IdPersonalMedico"></select>
+                <span asp-validation-for="IdPersonalMedico" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FechaCita" class="control-label"></label>
+                <input asp-for="FechaCita" class="form-control" />
+                <span asp-validation-for="FechaCita" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Estado" class="control-label"></label>
+                <input asp-for="Estado" class="form-control" />
+                <span asp-validation-for="Estado" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Comentarios" class="control-label"></label>
+                <input asp-for="Comentarios" class="form-control" />
+                <span asp-validation-for="Comentarios" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Guardar" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+        <form asp-controller="CitaMedica" asp-action="Index" method="get">
+            <div class="form-group">
+                <input type="submit" value="Regresar" class="btn btn-success" />
+            </div>
+        </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+</body>
+</html>

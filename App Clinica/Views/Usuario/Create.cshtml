@@ -1,0 +1,111 @@
+﻿@model App_Clinica.Models.Usuario
+
+<h4>Usuario</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-controller="Usuario" asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="IdTipoUsuario" class="control-label"></label>
+                <select asp-for="IdTipoUsuario" class="form-control" asp-items="ViewBag.IdTipoUsuario"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="NumeroIdentificacion" class="control-label"></label>
+                <input asp-for="NumeroIdentificacion" class="form-control" />
+                <span asp-validation-for="NumeroIdentificacion" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Contraseña" class="control-label"></label>
+                <input asp-for="Contraseña" class="form-control" type="password" />
+                <span asp-validation-for="Contraseña" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Nombre" class="control-label"></label>
+                <input asp-for="Nombre" class="form-control" />
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Apellido" class="control-label"></label>
+                <input asp-for="Apellido" class="form-control" />
+                <span asp-validation-for="Apellido" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Especialidad" class="control-label"></label>
+                <input asp-for="Especialidad" class="form-control" />
+                <span asp-validation-for="Especialidad" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Disponibilidad" class="control-label"></label>
+                <input asp-for="Disponibilidad" class="form-control" />
+                <span asp-validation-for="Disponibilidad" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Telefono" class="control-label"></label>
+                <input asp-for="Telefono" class="form-control" />
+                <span asp-validation-for="Telefono" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Crear" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <form asp-controller="Login" asp-action="login" method="get">
+        <div class="form-group">
+            <input type="submit" value="Regresar" class="btn btn-success" />
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const tipoUsuarioSelect = document.getElementById("IdTipoUsuario");
+            const especialidadContainer = document.getElementById("Especialidad").parentElement;
+            const disponibilidadContainer = document.getElementById("Disponibilidad").parentElement;
+            const especialidadLabel = document.querySelector("label[for='Especialidad']");
+            const disponibilidadLabel = document.querySelector("label[for='Disponibilidad']");
+            const especialidadInput = document.getElementById("Especialidad");
+            const disponibilidadInput = document.getElementById("Disponibilidad");
+
+            function toggleCamposAdicionales() {
+                if (tipoUsuarioSelect.value === "2") {
+                    // Mostrar los campos y las etiquetas
+                    especialidadContainer.style.display = "block";
+                    disponibilidadContainer.style.display = "block";
+                    especialidadLabel.style.display = "block";
+                    disponibilidadLabel.style.display = "block";
+                    especialidadInput.disabled = false;
+                    disponibilidadInput.disabled = false;
+                } else {
+                    // Ocultar los campos y las etiquetas
+                    especialidadContainer.style.display = "none";
+                    disponibilidadContainer.style.display = "none";
+                    especialidadLabel.style.display = "none";
+                    disponibilidadLabel.style.display = "none";
+                    especialidadInput.disabled = true;
+                    disponibilidadInput.disabled = true;
+                }
+            }
+
+            // Inicializar visibilidad al cargar la página
+            toggleCamposAdicionales();
+
+            // Escuchar cambios en el select
+            tipoUsuarioSelect.addEventListener("change", toggleCamposAdicionales);
+        });
+    </script>
+}

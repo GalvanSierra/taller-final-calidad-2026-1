@@ -1,0 +1,67 @@
+﻿@model IEnumerable<App_Clinica.Models.Notifiacion>
+
+@{
+    Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaEnvio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Mensaje)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Enviada)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdCitaNavigation)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaEnvio)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Mensaje)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Enviada)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdCitaNavigation.IdCita)
+            </td>
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("2"))
+                    {
+                        <td>
+                            <form asp-action="Edit" asp-route-id="@item.IdRecordatorio" method="get" style="display:inline;">
+                                <button type="submit" class="btn btn-warning btn-sm">Editar</button>
+                            </form>
+                            <form asp-action="Details" asp-route-id="@item.IdRecordatorio" method="get" style="display:inline;">
+                                <button type="submit" class="btn btn-info btn-sm">Detalles</button>
+                            </form>
+                            <form asp-action="Delete" asp-route-id="@item.IdRecordatorio" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                            </form>
+                        </td>
+                    }
+        </tr>
+}
+    </tbody>
+</table>
+</body>
+</html>

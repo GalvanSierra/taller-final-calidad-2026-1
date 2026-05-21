@@ -1,0 +1,45 @@
+trigger:
+- master 
+
+pool:
+  name: 'Default'  # Asegúrate de que tu agente está en este pool
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+- script: dotnet --list-sdks
+  displayName: 'Listar versiones de .NET instaladas'
+
+- task: UseDotNet@2
+  displayName: 'Instalar .NET SDK'
+  inputs:
+    packageType: 'sdk'
+    version: '9.0.300'  # Cambia esto si usas otra versión
+    installationPath: $(Agent.ToolsDirectory)/dotnet
+    performMultiLevelLookup: true
+
+- script: dotnet --version
+  displayName: 'Verificar versión de .NET SDK'
+
+- script: |
+    echo "Ruta del código fuente: $(Agent.BuildDirectory)/s"
+  displayName: 'Mostrar ruta del código fuente'
+
+
+- script: |
+    dotnet test "$(Agent.BuildDirectory)/s/TestProject/TestProject.csproj" --configuration $(buildConfiguration) --logger trx
+  displayName: 'Ejecutar pruebas xUnit (script manual)'
+
+- script: |
+    echo "Buscando archivos .trx"
+    dir $(Agent.BuildDirectory) /s /b | findstr /i .trx
+  displayName: 'Listar archivos .trx generados'
+
+# - task: PublishTestResults@2
+#   displayName: 'Publicar resultados de pruebas'
+#   inputs:
+#     testResultsFormat: 'VSTest'
+#     testResultsFiles: '*.trx'
+#     searchFolder: '$(Agent.BuildDirectory)/s/TestProject/TestResults'
+#     failTaskOnMissingResultsFile: true

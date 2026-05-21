@@ -1,0 +1,38 @@
+﻿@model App_Clinica.Models.Notifiacion
+
+<h4>Notificación</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="IdCita" class="control-label"></label>
+                <select asp-for="IdCita" class="form-control" asp-items="ViewBag.IdCita"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Mensaje" class="control-label"></label>
+                <input asp-for="Mensaje" class="form-control" />
+                <span asp-validation-for="Mensaje" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Enviada" /> @Html.DisplayNameFor(model => model.Enviada)
+                </label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Crear" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index" class="btn btn-secondary">Volver a la lista</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

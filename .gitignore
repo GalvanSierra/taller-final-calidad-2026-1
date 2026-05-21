@@ -1,0 +1,119 @@
+# ============================================================
+# .gitignore - App Clínica (ASP.NET Core 9 / EF Core / RabbitMQ)
+# ============================================================
+
+# ------------------------------------------------------------
+# ARCHIVOS SENSIBLES - NUNCA subir al repositorio
+# ------------------------------------------------------------
+credentials.json
+token.json/
+*.json.bak
+
+appsettings.*.json
+!appsettings.json
+!appsettings.Development.json
+
+# Variables de entorno
+.env
+.env.*
+
+# ------------------------------------------------------------
+# BUILD Y COMPILACIÓN (.NET)
+# ------------------------------------------------------------
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Archivos generados por el compilador
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# ------------------------------------------------------------
+# VISUAL STUDIO / RIDER / VSCODE
+# ------------------------------------------------------------
+.vs/
+.vsidx
+.vscode/
+.idea/
+*.DotSettings.user
+
+# ------------------------------------------------------------
+# NUGET
+# ------------------------------------------------------------
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# ------------------------------------------------------------
+# ENTITY FRAMEWORK CORE
+# ------------------------------------------------------------
+# No ignorar las migraciones, sí ignorar snapshots temporales
+# Migrations/__EFMigrationsHistory  <- NO ignorar
+
+# ------------------------------------------------------------
+# NODE / FRONTEND
+# ------------------------------------------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+dist/
+.parcel-cache/
+
+# ------------------------------------------------------------
+# DOCKER
+# ------------------------------------------------------------
+*.tar
+*.tar.gz
+*.tgz
+docker-compose.override.yml
+
+# ------------------------------------------------------------
+# LOGS Y TEMPORALES
+# ------------------------------------------------------------
+*.log
+*.tmp
+*.bak
+*.swp
+*.orig
+Thumbs.db
+.DS_Store
+ehthumbs.db
+Desktop.ini
+
+# ------------------------------------------------------------
+# PUBLICACIÓN / DESPLIEGUE
+# ------------------------------------------------------------
+[Pp]ublish/
+PublishProfiles/
+*.pubxml
+*.pubxml.user
+
+# ------------------------------------------------------------
+# CERTIFICADOS Y CLAVES
+# ------------------------------------------------------------
+*.pfx
+*.p12
+*.pem
+*.key
+*.cer
+
+# ------------------------------------------------------------
+# COBERTURA DE PRUEBAS
+# ------------------------------------------------------------
+TestResults/
+coverage/
+*.coverage
+*.coveragexml
