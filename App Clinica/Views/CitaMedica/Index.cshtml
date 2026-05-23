@@ -1,150 +1,331 @@
 ﻿@model App_Clinica.Models.UsuarioCitasViewModel
-
 @{
-    Layout = "_Layout";
+    Layout = null;
 }
 
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Usuario y Citas</title>
-</head>
-<body>
-    <h1>Información del Usuario</h1>
-    <table class="table table-striped">
-        <tr>
-            <th>Identificación</th>
-            <td>@Model.Usuario.NumeroIdentificacion</td>
-        </tr>
-        <tr>
-            <th>Nombre</th>
-            <td>@Model.Usuario.Nombre</td>
-        </tr>
-        <tr>
-            <th>Apellido</th>
-            <td>@Model.Usuario.Apellido</td>
-        </tr>
-        <tr>
-            <th>Email</th>
-            <td>@Model.Usuario.Email</td>
-        </tr>
-    </table>
-
-    <h1>Citas Médicas</h1>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Fecha de Cita</th>
-                <th>Estado</th>
-                <th>Comentarios</th>
-                <th>Afiliado</th>
-                <th>Personal Médico</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var cita in Model.CitasMedicas)
-            {
-                <tr>
-                    <td>@Html.DisplayFor(modelItem => cita.FechaCita)</td>
-                    <td>@Html.DisplayFor(modelItem => cita.Estado)</td>
-                    <td>@Html.DisplayFor(modelItem => cita.Comentarios)</td>
-                    <td>@Html.DisplayFor(modelItem => cita.IdAfiliadoNavigation.Nombre)</td>
-                    <td>@Html.DisplayFor(modelItem => cita.IdPersonalMedicoNavigation.Nombre)</td>
-                    @if (User.Identity.IsAuthenticated && User.IsInRole("2"))
-                    {
-                        <td>
-                            <form asp-action="Edit" asp-route-id="@cita.IdCita" method="get" style="display:inline;">
-                                <button type="submit" class="btn btn-warning btn-sm">Editar</button>
-                            </form>
-                            <form asp-action="Details" asp-route-id="@cita.IdCita" method="get" style="display:inline;">
-                                <button type="submit" class="btn btn-info btn-sm">Detalles</button>
-                            </form>
-                            <form asp-action="Delete" asp-route-id="@cita.IdCita" method="post" style="display:inline;">
-                                <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
-                            </form>
-                        </td>
-                    }
-                </tr>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mis Citas — App Clínica</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        border: "hsl(240 5.9% 90%)",
+                        background: "hsl(20 14.3% 95.5%)",
+                        foreground: "hsl(240 10% 3.9%)",
+                        primary: {
+                            DEFAULT: "hsl(240 5.9% 10%)",
+                            foreground: "hsl(0 0% 98%)",
+                        },
+                        muted: {
+                            DEFAULT: "hsl(240 4.8% 95.9%)",
+                            foreground: "hsl(240 3.8% 46.1%)",
+                        },
+                        card: {
+                            DEFAULT: "hsl(0 0% 100%)",
+                            foreground: "hsl(240 10% 3.9%)",
+                        },
+                        destructive: {
+                            DEFAULT: "hsl(0 84.2% 60.2%)",
+                            foreground: "hsl(0 0% 98%)",
+                        },
+                    },
+                    borderRadius: {
+                        lg: "0.5rem",
+                        xl: "0.75rem",
+                    },
+                }
             }
-        </tbody>
-    </table>
-</body>
-</html>
+        }
+    </script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+        }
+        .btn-ghost-nav {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: hsl(240 3.8% 46.1%);
+            background: transparent;
+            border: none;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: background-color 0.15s ease, color 0.15s ease;
+            text-decoration: none;
+        }
+        .btn-ghost-nav:hover {
+            background-color: hsl(240 4.8% 95.9%);
+            color: hsl(240 10% 3.9%);
+        }
+        .btn-outline {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.25rem;
+            padding: 0.375rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: hsl(240 10% 3.9%);
+            background: transparent;
+            border: 1px solid hsl(240 5.9% 90%);
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: background-color 0.15s ease;
+            text-decoration: none;
+        }
+        .btn-outline:hover {
+            background-color: hsl(240 4.8% 95.9%);
+        }
+        .btn-destructive {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.25rem;
+            padding: 0.375rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: hsl(0 0% 98%);
+            background-color: hsl(0 84.2% 60.2%);
+            border: 1px solid hsl(0 84.2% 60.2%);
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: background-color 0.15s ease;
+            text-decoration: none;
+        }
+        .btn-destructive:hover {
+            background-color: hsl(0 72% 51%);
+        }
+        .btn-primary-sm {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.375rem;
+            padding: 0.5rem 1rem;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: hsl(0 0% 98%);
+            background-color: hsl(240 5.9% 10%);
+            border: 1px solid hsl(240 5.9% 10%);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.15s ease;
+            text-decoration: none;
+        }
+        .btn-primary-sm:hover {
+            background-color: hsl(240 5.9% 16%);
+        }
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.125rem 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            border-radius: 9999px;
+        }
 
-
-
-@* @model IEnumerable<App_Clinica.Models.CitaMedica>
-
-@{
-    Layout = "_Layout";
-}
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
+        @@keyframes fadeIn {
+            from { opacity: 0; transform: translateY(0.5rem); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-in {
+            animation: fadeIn 0.35s ease-out forwards;
+        }
+        @@media (max-width: 640px) {
+            .table-wrap {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+        }
+    </style>
 </head>
-<body>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.FechaCita)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Estado)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Comentarios)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.IdAfiliadoNavigation)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.IdPersonalMedicoNavigation)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model) {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.FechaCita)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Estado)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Comentarios)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.IdAfiliadoNavigation.Nombre)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.IdPersonalMedicoNavigation.Nombre)
-                    </td>
-                    @if (User.Identity.IsAuthenticated && User.IsInRole("2"))
-                    {
-                        <td>
-                            <form asp-action="Edit" asp-route-id="@item.IdCita" method="get" style="display:inline;">
-                                <button type="submit" class="btn btn-warning btn-sm">Edit</button>
-                            </form>
-                            <form asp-action="Details" asp-route-id="@item.IdCita" method="get" style="display:inline;">
-                                <button type="submit" class="btn btn-info btn-sm">Details</button>
-                            </form>
-                            <form asp-action="Delete" asp-route-id="@item.IdCita" method="post" style="display:inline;">
-                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                            </form>
-                        </td>
-                    }
-                </tr>
-}
-    </tbody>
-</table>
+<body class="bg-[hsl(20_14.3%_95.5%)] min-h-screen flex flex-col">
+    <!-- Navbar -->
+    <header class="w-full border-b border-[hsl(240_5.9%_90%)] bg-white/80 backdrop-blur-sm">
+        <div class="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
+            <div class="flex items-center gap-2 text-sm font-medium text-[hsl(240_10%_3.9%)]">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+                </svg>
+                <span class="hidden sm:inline">App Clínica</span>
+            </div>
+            <nav class="flex items-center gap-1">
+                <form asp-controller="CitaMedica" asp-action="Create" method="get" class="m-0">
+                    <button type="submit" class="btn-ghost-nav">Nueva Cita</button>
+                </form>
+                <form asp-controller="Usuario" asp-action="Index" method="get" class="m-0">
+                    <button type="submit" class="btn-ghost-nav">Perfil</button>
+                </form>
+                @if (User.Identity.IsAuthenticated && User.IsInRole("2"))
+                {
+                    <form asp-controller="Notifiacion" asp-action="Index" method="get" class="m-0">
+                        <button type="submit" class="btn-ghost-nav">Notificaciones</button>
+                    </form>
+                }
+                <form asp-controller="Login" asp-action="Logout" method="get" class="m-0">
+                    <button type="submit" class="btn-ghost-nav">Cerrar sesión</button>
+                </form>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-1 px-4 py-8">
+        <div class="max-w-4xl mx-auto animate-in">
+            <!-- Page header -->
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+                <div>
+                    <h1 class="text-lg font-semibold text-[hsl(240_10%_3.9%)]">Mis Citas Médicas</h1>
+                    <p class="text-sm text-[hsl(240_3.8%_46.1%)] mt-0.5">@Model.Usuario.Nombre @Model.Usuario.Apellido</p>
+                </div>
+                <form asp-action="Create" method="get" class="m-0">
+                    <button type="submit" class="btn-primary-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                        Agendar cita
+                    </button>
+                </form>
+            </div>
+
+            @if (Model.CitasMedicas.Any())
+            {
+                <!-- Table -->
+                <div class="bg-white rounded-xl shadow-sm border border-[hsl(240_5.9%_90%)] overflow-hidden">
+                    <div class="table-wrap">
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr class="border-b border-[hsl(240_5.9%_90%)] bg-[hsl(240_4.8%_95.9%)]">
+                                    <th class="text-left px-4 py-3 font-medium text-[hsl(240_10%_3.9%)]">Fecha</th>
+                                    <th class="text-left px-4 py-3 font-medium text-[hsl(240_10%_3.9%)]">Estado</th>
+                                    <th class="text-left px-4 py-3 font-medium text-[hsl(240_10%_3.9%)] hidden md:table-cell">Comentarios</th>
+                                    <th class="text-left px-4 py-3 font-medium text-[hsl(240_10%_3.9%)]">Afiliado</th>
+                                    <th class="text-left px-4 py-3 font-medium text-[hsl(240_10%_3.9%)] hidden sm:table-cell">Médico</th>
+                                    @if (User.Identity.IsAuthenticated && User.IsInRole("2"))
+                                    {
+                                        <th class="text-right px-4 py-3 font-medium text-[hsl(240_10%_3.9%)]">Acciones</th>
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-[hsl(240_5.9%_90%)]">
+                                @foreach (var cita in Model.CitasMedicas)
+                                {
+                                    <tr class="hover:bg-[hsl(240_4.8%_95.9%)/50] transition-colors">
+                                        <td class="px-4 py-3 whitespace-nowrap">
+                                            <span class="font-medium text-[hsl(240_10%_3.9%)]">@cita.FechaCita.ToString("dd/MM/yyyy")</span>
+                                            <span class="text-[hsl(240_3.8%_46.1%)] ml-1">@cita.FechaCita.ToString("HH:mm")</span>
+                                        </td>
+                                        <td class="px-4 py-3 whitespace-nowrap">
+                                            @{
+                                                var estado = cita.Estado ?? "";
+                                                var badgeBg = "bg-[hsl(240_4.8%_95.9%)] text-[hsl(240_3.8%_46.1%)]";
+                                                if (estado.Equals("Agendada", StringComparison.OrdinalIgnoreCase))
+                                                    badgeBg = "bg-blue-50 text-blue-700";
+                                                else if (estado.Equals("Completada", StringComparison.OrdinalIgnoreCase))
+                                                    badgeBg = "bg-green-50 text-green-700";
+                                                else if (estado.Equals("Cancelada", StringComparison.OrdinalIgnoreCase))
+                                                    badgeBg = "bg-red-50 text-red-700";
+                                            }
+                                            <span class="status-badge @badgeBg">@estado</span>
+                                        </td>
+                                        <td class="px-4 py-3 text-[hsl(240_3.8%_46.1%)] max-w-[12rem] truncate hidden md:table-cell">@(cita.Comentarios ?? "—")</td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-[hsl(240_10%_3.9%)]">@cita.IdAfiliadoNavigation?.Nombre</td>
+                                        <td class="px-4 py-3 whitespace-nowrap text-[hsl(240_10%_3.9%)] hidden sm:table-cell">@cita.IdPersonalMedicoNavigation?.Nombre</td>
+                                        @if (User.Identity.IsAuthenticated && User.IsInRole("2"))
+                                        {
+                                            <td class="px-4 py-3 whitespace-nowrap text-right">
+                                                <div class="flex items-center justify-end gap-1">
+                                                    <form asp-action="Edit" asp-route-id="@cita.IdCita" method="get" class="m-0 inline">
+                                                        <button type="submit" class="btn-outline">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                                <path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
+                                                            </svg>
+                                                            Editar
+                                                        </button>
+                                                    </form>
+                                                    <form asp-action="Details" asp-route-id="@cita.IdCita" method="get" class="m-0 inline">
+                                                        <button type="submit" class="btn-outline">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                                <circle cx="12" cy="12" r="10"/>
+                                                                <path d="M12 16v-4"/>
+                                                                <path d="M12 8h.01"/>
+                                                            </svg>
+                                                            Ver
+                                                        </button>
+                                                    </form>
+                                                    <form asp-action="Delete" asp-route-id="@cita.IdCita" method="post" class="m-0 inline">
+                                                        <button type="submit" class="btn-destructive">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                                <path d="M3 6h18"/>
+                                                                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                                                                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                                                            </svg>
+                                                            Eliminar
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        }
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <!-- Empty state -->
+                <div class="bg-white rounded-xl shadow-sm border border-[hsl(240_5.9%_90%)] p-12 text-center">
+                    <div class="mx-auto mb-4 w-14 h-14 rounded-full bg-[hsl(240_4.8%_95.9%)] flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="hsl(240 3.8% 46.1%)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="16" y1="2" x2="16" y2="6"/>
+                            <line x1="8" y1="2" x2="8" y2="6"/>
+                            <line x1="3" y1="10" x2="21" y2="10"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-sm font-medium text-[hsl(240_10%_3.9%)]">No tienes citas agendadas</h3>
+                    <p class="text-sm text-[hsl(240_3.8%_46.1%)] mt-1">Agenda una nueva cita médica para comenzar.</p>
+                    <form asp-action="Create" method="get" class="mt-4">
+                        <button type="submit" class="btn-primary-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="12" y1="5" x2="12" y2="19"/>
+                                <line x1="5" y1="12" x2="19" y2="12"/>
+                            </svg>
+                            Agendar primera cita
+                        </button>
+                    </form>
+                </div>
+            }
+
+            <!-- Back -->
+            <div class="mt-6 text-center">
+                <form asp-controller="Usuario" asp-action="Inicio" method="get" class="inline">
+                    <button type="submit" class="btn-ghost-nav text-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline mr-1">
+                            <path d="m15 18-6-6 6-6"/>
+                        </svg>
+                        Volver al inicio
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer class="border-t border-[hsl(240_5.9%_90%)] bg-white/50">
+        <div class="max-w-5xl mx-auto px-4 h-12 flex items-center justify-center">
+            <p class="text-xs text-[hsl(240_3.8%_61%)]">&copy; 2024 App Clínica — Sura EPS</p>
+        </div>
+    </footer>
 </body>
 </html>
- *@
