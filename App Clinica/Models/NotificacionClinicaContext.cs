@@ -1,19 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace App_Clinica.Models;
 
 public partial class NotificacionClinicaContext : DbContext
 {
-    public NotificacionClinicaContext()
-    {
-    }
-
     public NotificacionClinicaContext(DbContextOptions<NotificacionClinicaContext> options)
         : base(options)
     {
     }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+{
+    if (!optionsBuilder.IsConfigured)
+    {
+        optionsBuilder
+            .UseSqlServer("...tu cadena de conexión...")
+            .ConfigureWarnings(w => 
+                w.Ignore(RelationalEventId.PendingModelChangesWarning));
+    }
+}
+
 
     public virtual DbSet<CitaMedica> CitaMedicas { get; set; }
 
@@ -22,17 +31,6 @@ public partial class NotificacionClinicaContext : DbContext
     public virtual DbSet<TipoUsuario> TipoUsuarios { get; set; }
 
     public virtual DbSet<Usuario> Usuarios { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        if (!optionsBuilder.IsConfigured)
-        {
-            optionsBuilder.UseSqlServer("Server=DESKTOP-AUH25HQ;Database=NotificacionClinica;User Id=madrid;Password=Ke9Se4Ma96*;Trusted_Connection=True;TrustServerCertificate=True;");
-        }
-    }
-    //    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-    //        => optionsBuilder.UseSqlServer("Server=DESKTOP-AUH25HQ;Database=NotificacionClinica;User Id=madrid;Password=Ke9Se4Ma96*;Trusted_Connection=True;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -30,6 +30,8 @@ namespace App_Clinica.Consumidor_de_Eventos
         private readonly string[] _routingKeys = { "CitaCreada", "RegistroCreado", "NotificacionCita"};
         public EventConsumerService(ILogger<EventConsumerService> logger)
         {
+            try
+            {
             var factory = new ConnectionFactory() { HostName = "localhost" };
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
@@ -92,11 +94,22 @@ namespace App_Clinica.Consumidor_de_Eventos
                 // Iniciar la escucha de la cola con autoAck: false
                 _channel.BasicConsume(queue, false, consumer);
             }
+            }
+                catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al iniciar el consumidor de eventos");
+            }
 
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
+             if (_channel == null)
+    {
+        _logger.LogWarning("Canal RabbitMQ no inicializado. El servicio no consumirá mensajes.");
+        return Task.CompletedTask;
+    }
+    
             // Establecer el comportamiento de cancelación
             stoppingToken.Register(() =>
             {
