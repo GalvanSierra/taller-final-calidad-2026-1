@@ -104,5 +104,21 @@ namespace TestProject
             Assert.Single(model.CitasMedicas);
         }
 
+        [Fact]
+        public async Task Details_NonExistentId_ShouldReturnNotFound()
+        {
+            // Arrange
+            var context = GetInMemoryContext("DetailsNotFoundDB");
+            var contextNoti = GetInMemoryContext("DetailsNotiNotFoundDB");
+
+            var notiControllerMock = new Mock<NotifiacionController>(contextNoti);
+            var controller = new CitaMedicaController(context, notiControllerMock.Object);
+
+            // Act — ID 999 no existe en la base de datos en memoria
+            var result = await controller.Details(999);
+
+            // Assert
+            Assert.IsType<NotFoundResult>(result);
+        }
     }
 }

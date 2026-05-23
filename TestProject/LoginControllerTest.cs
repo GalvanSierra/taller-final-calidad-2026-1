@@ -149,5 +149,40 @@ namespace TestProject
                 Assert.Equal("Usuario", redirectResult.ControllerName);
             }
         }
+
+        [Fact]
+        public async Task Login_Post_InvalidCredentials_ShouldReturnViewWithModelError()
+        {
+            // Arrange
+            var options = new DbContextOptionsBuilder<NotificacionClinicaContext>()
+                .UseInMemoryDatabase("LoginInvalidTestDB")
+                .Options;
+
+            using var context = new NotificacionClinicaContext(options);
+            // Base de datos vacía — ninguna credencial será válida
+
+            var controller = new LoginController(context);
+            controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext()
+            };
+
+            var loginModel = new Login
+            {
+                NumeroIdentificacion = "99999",
+                Contraseña = "contraseña_incorrecta"
+            };
+
+            // Act
+            var result = await controller.login(loginModel);
+
+            // Assert — debe retornar la vista con error de modelo, no redirigir
+            var viewResult = Assert.IsType<ViewResult>(result);
+            Assert.False(controller.ModelState.IsValid);
+            Assert.True(
+                controller.ModelState.ContainsKey(string.Empty),
+                "Se esperaba un error global de ModelState por credenciales inválidas."
+            );
+        }
     }
 }
