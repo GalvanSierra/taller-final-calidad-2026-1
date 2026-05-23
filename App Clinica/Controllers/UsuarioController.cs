@@ -91,16 +91,34 @@ namespace App_Clinica.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(usuario);
-                await _context.SaveChangesAsync();
+                var existe = await _context.Usuarios
+                    .AnyAsync(u => u.NumeroIdentificacion == usuario.NumeroIdentificacion);
 
-                var message = $"Hola {usuario.Nombre}, tu registro al servicio en linea de citas medicas de Sura EPS, es exitoso";
-                var messageSerialize = JsonSerializer.Serialize(message);
-                PublishEvent("RegistroCreado", messageSerialize, usuario.Email);
+                if (existe)
+                {
+                    ModelState.AddModelError(nameof(usuario.NumeroIdentificacion),
+                        "El número de identificación ingresado ya se encuentra registrado.");
+                }
+                else
+                {
+                    _context.Add(usuario);
+                    await _context.SaveChangesAsync();
 
-                return RedirectToAction("login", "Login");
+                    var message = $"Hola {usuario.Nombre}, tu registro al servicio en linea de citas medicas de Sura EPS, es exitoso";
+                    var messageSerialize = JsonSerializer.Serialize(message);
+                    PublishEvent("RegistroCreado", messageSerialize, usuario.Email);
+
+                    return RedirectToAction("login", "Login");
+                }
             }
-            ViewData["IdTipoUsuario"] = new SelectList(_context.TipoUsuarios, "IdTipoUsuario", "IdTipoUsuario", usuario.IdTipoUsuario);
+
+            var tipoUsuarios = _context.TipoUsuarios.Select(t => new SelectListItem
+            {
+                Value = t.IdTipoUsuario.ToString(),
+                Text = t.NombreTipo
+            }).ToList();
+
+            ViewBag.IdTipoUsuario = tipoUsuarios;
             return View(usuario);
         }
 
