@@ -1,20 +1,185 @@
 ﻿@model App_Clinica.Models.Usuario
-
-<h4>Bienvenido a Sura EPS</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-controller="Login" asp-action="login">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <input type="submit" value="Iniciar Sesión" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
-
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+@{
+    Layout = null;
 }
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bienvenido — App Clínica</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        border: "hsl(240 5.9% 90%)",
+                        background: "hsl(20 14.3% 95.5%)",
+                        foreground: "hsl(240 10% 3.9%)",
+                        primary: {
+                            DEFAULT: "hsl(240 5.9% 10%)",
+                            foreground: "hsl(0 0% 98%)",
+                        },
+                        muted: {
+                            foreground: "hsl(240 3.8% 46.1%)",
+                        },
+                    },
+                    borderRadius: {
+                        lg: "0.5rem",
+                        xl: "0.75rem",
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+        }
+        .btn-primary-shad {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.625rem 1.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            line-height: 1.5;
+            color: hsl(0 0% 98%);
+            background-color: hsl(240 5.9% 10%);
+            border: 1px solid hsl(240 5.9% 10%);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.15s ease;
+            text-decoration: none;
+        }
+        .btn-primary-shad:hover {
+            background-color: hsl(240 5.9% 16%);
+        }
+        .btn-primary-shad:focus-visible {
+            outline: none;
+            box-shadow: 0 0 0 2px hsl(0 0% 100%), 0 0 0 4px hsl(240 5.9% 10% / 0.3);
+        }
+        .btn-ghost {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: hsl(240 3.8% 46.1%);
+            background: transparent;
+            border: 1px solid hsl(240 5.9% 90%);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.15s ease, color 0.15s ease;
+            text-decoration: none;
+        }
+        .btn-ghost:hover {
+            background-color: hsl(240 4.8% 95.9%);
+            color: hsl(240 10% 3.9%);
+        }
+
+        @@keyframes fadeIn {
+            from { opacity: 0; transform: translateY(0.75rem); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @@keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(1.5rem); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @@keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        .animate-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        .animate-in-up {
+            opacity: 0;
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+    </style>
+</head>
+<body class="bg-[hsl(20_14.3%_95.5%)] min-h-screen flex flex-col">
+    <!-- Navbar sutil -->
+    <header class="w-full border-b border-[hsl(240_5.9%_90%)] bg-white/80 backdrop-blur-sm">
+        <div class="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
+            <div class="flex items-center gap-2 text-sm font-medium text-[hsl(240_10%_3.9%)]">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+                </svg>
+                App Clínica
+            </div>
+            <form asp-controller="Login" asp-action="login" method="get" class="m-0">
+                <button type="submit" class="btn-ghost text-sm px-4 py-1.5">
+                    Iniciar sesión
+                </button>
+            </form>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <main class="flex-1 flex items-center justify-center px-4 py-12">
+        <div class="max-w-2xl mx-auto text-center">
+
+            <!-- Icono animado -->
+            <div class="animate-float mb-8">
+                <div class="mx-auto w-20 h-20 rounded-2xl bg-[hsl(240_5.9%_10%)] flex items-center justify-center shadow-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Título -->
+            <h1 class="text-3xl sm:text-4xl font-bold text-[hsl(240_10%_3.9%)] tracking-tight animate-in-up delay-1">
+                Bienvenido a Sura EPS
+            </h1>
+            <p class="mt-4 text-base sm:text-lg text-[hsl(240_3.8%_46.1%)] max-w-md mx-auto leading-relaxed animate-in-up delay-2">
+                Gestiona tus citas médicas, consulta tu historial y recibe notificaciones en un solo lugar.
+            </p>
+
+            <!-- Acciones -->
+            <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 animate-in-up delay-3">
+                <form asp-controller="Login" asp-action="login" method="get" class="m-0">
+                    <button type="submit" class="btn-primary-shad gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+                            <polyline points="10 17 15 12 10 7"/>
+                            <line x1="15" y1="12" x2="3" y2="12"/>
+                        </svg>
+                        Iniciar sesión
+                    </button>
+                </form>
+                <form asp-controller="Usuario" asp-action="Create" method="get" class="m-0">
+                    <button type="submit" class="btn-ghost gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <line x1="19" y1="8" x2="19" y2="14"/>
+                            <line x1="22" y1="11" x2="16" y2="11"/>
+                        </svg>
+                        Crear cuenta
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-[hsl(240_5.9%_90%)] bg-white/50">
+        <div class="max-w-5xl mx-auto px-4 h-12 flex items-center justify-center">
+            <p class="text-xs text-[hsl(240_3.8%_61%)]">&copy; 2024 App Clínica — Sura EPS</p>
+        </div>
+    </footer>
+</body>
+</html>
