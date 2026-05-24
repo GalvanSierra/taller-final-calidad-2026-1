@@ -1,5 +1,6 @@
 ﻿using App_Clinica.Controllers;
 using App_Clinica.Models;
+using BCrypt.Net;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
@@ -37,7 +38,7 @@ namespace TestProject
                 IdUsuario = 1,
                 IdTipoUsuario = 1,
                 NumeroIdentificacion = "12345",
-                Contraseña = "abc",
+                Contraseña = BCrypt.Net.BCrypt.HashPassword("abc"),
                 Nombre = "Juan",
                 Apellido = "Pérez",
                 Email = "juan@example.com",

@@ -12,6 +12,7 @@ using RabbitMQ.Client;
 using System.Text.Json;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using BCrypt.Net;
 
 namespace App_Clinica.Controllers
 {
@@ -101,6 +102,7 @@ namespace App_Clinica.Controllers
                 }
                 else
                 {
+                    usuario.Contraseña = BCrypt.Net.BCrypt.HashPassword(usuario.Contraseña);
                     _context.Add(usuario);
                     await _context.SaveChangesAsync();
 
@@ -155,6 +157,17 @@ namespace App_Clinica.Controllers
             {
                 try
                 {
+                    if (string.IsNullOrEmpty(usuario.Contraseña))
+                    {
+                        var existing = await _context.Usuarios.AsNoTracking()
+                            .FirstOrDefaultAsync(u => u.IdUsuario == id);
+                        usuario.Contraseña = existing?.Contraseña ?? string.Empty;
+                    }
+                    else
+                    {
+                        usuario.Contraseña = BCrypt.Net.BCrypt.HashPassword(usuario.Contraseña);
+                    }
+
                     _context.Update(usuario);
                     await _context.SaveChangesAsync();
                 }

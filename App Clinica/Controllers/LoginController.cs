@@ -35,7 +35,12 @@ namespace App_Clinica.Controllers
 
                 // Consulta a la base de datos para validar las credenciales
                 var usuarioValido = await _context.Usuarios
-                    .FirstOrDefaultAsync(u => u.NumeroIdentificacion == numeroIdentificacion && u.Contraseña == contraseña);
+                    .FirstOrDefaultAsync(u => u.NumeroIdentificacion == numeroIdentificacion);
+
+                if (usuarioValido != null && !BCrypt.Net.BCrypt.Verify(contraseña, usuarioValido.Contraseña))
+                {
+                    usuarioValido = null;
+                }
 
                 if (usuarioValido != null)
                 {

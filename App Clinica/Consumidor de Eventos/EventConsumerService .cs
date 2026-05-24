@@ -30,12 +30,12 @@ namespace App_Clinica.Consumidor_de_Eventos
         private readonly string[] _routingKeys = { "CitaCreada", "RegistroCreado", "NotificacionCita"};
         public EventConsumerService(ILogger<EventConsumerService> logger)
         {
+            _logger = logger;
             try
             {
             var factory = new ConnectionFactory() { HostName = "localhost" };
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
-            _logger = logger;
 
             var exchange = "clinic_events";
 

@@ -36,7 +36,7 @@ builder.Services.AddHostedService<EventConsumerService>();
 
 var app = builder.Build();
 
-// Configurar el middleware de autenticación
+// Configurar el middleware de autenticaciï¿½n
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -51,8 +51,6 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
-app.UseAuthorization();
-
 app.MapStaticAssets();
 
 app.MapControllerRoute(
@@ -61,61 +59,3 @@ app.MapControllerRoute(
     .WithStaticAssets();
 
 app.Run();
-
-
-//using App_Clinica.Consumidor_de_Eventos;
-//using App_Clinica.Models;
-//using Microsoft.AspNetCore.Authentication.Cookies;
-//using Microsoft.EntityFrameworkCore;
-//using RabbitMQ.Client;
-//using Serilog;
-
-//var builder = WebApplication.CreateBuilder(args);
-
-//builder.Logging.AddConsole();
-
-//builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-//        .AddCookie(options =>
-//        {
-//            options.LoginPath = "/Login/login"; // Ruta de login
-//            options.AccessDeniedPath = "/Login/Logout"; // Ruta de acceso denegado
-//        });
-
-//// Add services to the container.
-//builder.Services.AddControllersWithViews();
-
-//builder.Services.AddDbContext<NotificacionClinicaContext>(options =>
-//    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-//builder.Services.AddHostedService<EventConsumerService>();
-
-//builder.Logging.AddConsole();
-
-//var app = builder.Build();
-
-//// Configurar el middleware de autenticación
-//app.UseAuthentication();
-//app.UseAuthorization();
-
-//// Configure the HTTP request pipeline.
-//if (!app.Environment.IsDevelopment())
-//{
-//    app.UseExceptionHandler("/Home/Error");
-//    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-//    app.UseHsts();
-//}
-
-//app.UseHttpsRedirection();
-//app.UseRouting();
-
-//app.UseAuthorization();
-
-//app.MapStaticAssets();
-
-//app.MapControllerRoute(
-//    name: "default",
-//    pattern: "{controller=Usuario}/{action=Inicio}/{id?}")
-//    .WithStaticAssets();
-
-
-//app.Run();
