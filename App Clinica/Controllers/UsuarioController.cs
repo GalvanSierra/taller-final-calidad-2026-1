@@ -106,6 +106,8 @@ namespace App_Clinica.Controllers
                     _context.Add(usuario);
                     await _context.SaveChangesAsync();
 
+                    TempData["RegistroExitoso"] = $"¡Registro exitoso! Bienvenido, {usuario.Nombre}.";
+
                     var message = $"Hola {usuario.Nombre}, tu registro al servicio en linea de citas medicas de Sura EPS, es exitoso";
                     var messageSerialize = JsonSerializer.Serialize(message);
                     PublishEvent("RegistroCreado", messageSerialize, usuario.Email);

@@ -161,6 +161,20 @@
                 <p class="text-sm text-[hsl(240_3.8%_46.1%)] mt-1">Ingresa tus credenciales para acceder</p>
             </div>
 
+            <!-- Success toast -->
+            @if (TempData["RegistroExitoso"] is string mensajeExito)
+            {
+                <div class="mb-6 p-3 rounded-lg bg-green-50 border border-green-200 text-sm text-green-700 animate-in">
+                    <div class="flex items-start gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mt-0.5 shrink-0">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                            <polyline points="22 4 12 14.01 9 11.01"/>
+                        </svg>
+                        <div>@mensajeExito</div>
+                    </div>
+                </div>
+            }
+
             <!-- Validation Summary -->
             @if (!ViewData.ModelState.IsValid)
             {

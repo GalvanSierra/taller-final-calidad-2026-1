@@ -4,14 +4,16 @@ using App_Clinica.Controllers;
 using App_Clinica.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
+using Moq;
 using System.Security.Claims;
 
 namespace TestProject
 {
     public class UsuarioControllerTests
     {
-        //Retorna correctamente la vista con el modelo del usuario que está autenticado
+        //Retorna correctamente la vista con el modelo del usuario que estï¿½ autenticado
         [Fact]
         public async Task Index_ReturnsViewResult_WithLoggedUser()
         {
@@ -33,7 +35,7 @@ namespace TestProject
                 IdUsuario = 1,
                 IdTipoUsuario = 1,
                 NumeroIdentificacion = "12345", // Debe coincidir con el claim
-                Contraseña = "test123",
+                ContraseÃ±a = "test123",
                 Nombre = "Test",
                 Apellido = "User",
                 Email = "test@example.com",
@@ -76,7 +78,7 @@ namespace TestProject
             }
         }
 
-        //Cuando se crea un nuevo usuario con datos válidos
+        //Cuando se crea un nuevo usuario con datos vï¿½lidos
         [Fact]
         public async Task Create_ValidModel_RedirectsToLogin()
         {
@@ -87,13 +89,14 @@ namespace TestProject
             using var context = new NotificacionClinicaContext(options);
 
             var controller = new UsuarioController(context);
+            controller.TempData = new TempDataDictionary(new DefaultHttpContext(), Mock.Of<ITempDataProvider>());
 
             var usuario = new Usuario
             {
                 IdUsuario = 2,
                 IdTipoUsuario = 1,
                 NumeroIdentificacion = "54321",
-                Contraseña = "password",
+                ContraseÃ±a = "password",
                 Nombre = "Nuevo",
                 Apellido = "Usuario",
                 Email = "nuevo@example.com",
